@@ -5,9 +5,23 @@ let infoWindow;
 let currentInfoWindow;
 let service;
 let infoPane;
+
+
+
+//User preferences
+let userPreferences = ["bowling", "sushi"];
+
+
+
+
+
+
+
+//Map Initialization
 function initMap() {
     // Initialize variables
     bounds = new google.maps.LatLngBounds();
+    //google.maps.LatLng, 100;
     infoWindow = new google.maps.InfoWindow;
     currentInfoWindow = infoWindow;
     
@@ -34,7 +48,7 @@ if (navigator.geolocation) {
         map.setCenter(pos);
 
         // Call Places Nearby Search on user's location
-        getNearbyPlaces(pos);
+        getPrefPlaces(pos, userPreferences);
     }, () => {
     // Browser supports geolocation, but user has denied permission
     handleLocationError(true, infoWindow);
@@ -43,6 +57,12 @@ if (navigator.geolocation) {
     // Browser doesn't support geolocation
     handleLocationError(false, infoWindow);
     }
+}
+
+function getPrefPlaces (pos, userPreferences) {
+    userPreferences.forEach(prefVal => {
+        getNearbyPlaces(pos, prefVal);
+    });
 }
 
 // Handle a geolocation error
@@ -63,20 +83,20 @@ function handleLocationError(browserHasGeolocation, infoWindow) {
     currentInfoWindow = infoWindow;
 
     // Call Places Nearby Search on the default location
-    getNearbyPlaces(pos);
+    getPrefPlaces(pos, userPreferences);
+
 }
-// End Geolocation
 
 // Perform a Places Nearby Search Request
-function getNearbyPlaces(position) {
+function getNearbyPlaces(position, prefVal) {
     let request = {
     location: position,
     rankBy: google.maps.places.RankBy.DISTANCE,
     /*BELOW CAN BE MODIFIED FOR USER PREFERENCE*/
-    keyword: 'trampoline'
-};
+    keyword: prefVal
+    };
 
-service = new google.maps.places.PlacesService(map);
+    service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, nearbyCallback);
 }
 
@@ -135,7 +155,6 @@ function showDetails(placeResult, marker, status) {
         console.log('showDetails failed: ' + status);
     }
 }
-
 
 // Displays place details in a sidebar
 function showPanel(placeResult) {
