@@ -1,27 +1,20 @@
 let pos;
 let map;
+let heatmap;
 let bounds;
 let infoWindow;
 let currentInfoWindow;
 let service;
 let infoPane;
-
-
-
+let userPlaces = [];
 //User preferences
-let userPreferences = ["bowling", "sushi"];
-
-
-
-
-
-
+let userPreferences = ["sushi", "arcade", "movies"]; 
 
 //Map Initialization
 function initMap() {
     // Initialize variables
     bounds = new google.maps.LatLngBounds();
-    //google.maps.LatLng, 100;
+    //Need to find a way to set radius bounds | google.maps.LatLng, 100;
     infoWindow = new google.maps.InfoWindow;
     currentInfoWindow = infoWindow;
     
@@ -30,29 +23,29 @@ function initMap() {
 
 
 // Try HTML5 geolocation
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => {
-        pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-        };
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: pos,
-            zoom: 15
-        });
-        bounds.extend(pos);
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: pos,
+                zoom: 15
+            });            
+            bounds.extend(pos);
 
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
-        map.setCenter(pos);
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            infoWindow.open(map);
+            map.setCenter(pos);
 
-        // Call Places Nearby Search on user's location
-        getPrefPlaces(pos, userPreferences);
-    }, () => {
-    // Browser supports geolocation, but user has denied permission
-    handleLocationError(true, infoWindow);
-    });
+            // Call Places Nearby Search on user's location
+            getPrefPlaces(pos, userPreferences);
+        }, () => {
+            // Browser supports geolocation, but user has denied permission
+            handleLocationError(true, infoWindow);
+            });
     } else {
     // Browser doesn't support geolocation
     handleLocationError(false, infoWindow);
@@ -63,6 +56,7 @@ function getPrefPlaces (pos, userPreferences) {
     userPreferences.forEach(prefVal => {
         getNearbyPlaces(pos, prefVal);
     });
+    //initHeatmap();
 }
 
 // Handle a geolocation error
@@ -103,7 +97,7 @@ function getNearbyPlaces(position, prefVal) {
 // Handle the results (up to 20) of the Nearby Search
 function nearbyCallback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-    createMarkers(results);
+        createMarkers(results);
     }
 }
 
@@ -111,11 +105,12 @@ function nearbyCallback(results, status) {
 function createMarkers(places) {
     places.forEach(place => {
         let marker = new google.maps.Marker({
-        position: place.geometry.location,
-        map: map,
-        title: place.name
-        });
-
+            position: place.geometry.location,
+            map: map,
+            title: place.name
+            });
+        userPlaces.push(marker);
+        
         // Add click listener to each marker
         google.maps.event.addListener(marker, 'click', () => {
             let request = {
@@ -144,6 +139,7 @@ function createMarkers(places) {
 // Builds an InfoWindow to display details above the marker
 function showDetails(placeResult, marker, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
+        console.log(userPlaces);
         let placeInfowindow = new google.maps.InfoWindow();
         placeInfowindow.setContent('<div><strong>' + placeResult.name +
         '</strong><br>' + 'Rating: ' + placeResult.rating + '</div>');
@@ -168,7 +164,6 @@ function showPanel(placeResult) {
         infoPane.removeChild(infoPane.lastChild);
     }
 
-    /* TODO: Step 4E: Display a Place Photo with the Place Details */
     // Add the primary photo, if there is one
     if (placeResult.photos != null) {
         let firstPhoto = placeResult.photos[0];
@@ -208,3 +203,45 @@ function showPanel(placeResult) {
     // Open the infoPane
     infoPane.classList.add("open");
 }
+
+/* HeatMap Options
+function toggleHeatmap() {
+    heatmap.setMap(heatmap.getMap() ? null : map);
+  }
+
+function changeGradient() {
+    const gradient = [
+        "rgba(0, 255, 255, 0)",
+        "rgba(0, 255, 255, 1)",
+        "rgba(0, 191, 255, 1)",
+        "rgba(0, 127, 255, 1)",
+        "rgba(0, 63, 255, 1)",
+        "rgba(0, 0, 255, 1)",
+        "rgba(0, 0, 223, 1)",
+        "rgba(0, 0, 191, 1)",
+        "rgba(0, 0, 159, 1)",
+        "rgba(0, 0, 127, 1)",
+        "rgba(63, 0, 91, 1)",
+        "rgba(127, 0, 63, 1)",
+        "rgba(191, 0, 31, 1)",
+        "rgba(255, 0, 0, 1)",
+    ];
+    heatmap.set("gradient", heatmap.get("gradient") ? null : gradient);
+}
+
+function changeRadius() {
+    heatmap.set("radius", heatmap.get("radius") ? null : 20);
+}
+  
+function changeOpacity() {
+    heatmap.set("opacity", heatmap.get("opacity") ? null : 0.2);
+}
+
+function initHeatmap() {
+    //Heatmap Init
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: placesLatLng,
+                map: map,
+              });
+}
+*/
