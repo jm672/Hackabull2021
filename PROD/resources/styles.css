@@ -1,0 +1,61 @@
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(to top left, #65E5C2, #68A3F5, #FC66F0);
+    
+}
+
+.centered-content {
+    padding: 35px;
+    border-radius: 20px;
+    background: white;
+}
+
+#green-text {
+    color: rgb(0, 209, 178);
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+}
+
+#blue-text {
+    color: rgb(50, 115, 220);
+    margin-left: 10px;
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+}
+
+#red-text {
+    color: rgb(241, 70, 104);
+    margin-left: 10px;
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+}
+
+#logo {
+    height: 120px;
+    width: 120px;
+    margin-left: 100px;
+    margin-bottom: 10px;
+}
+
+#logo-text{
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    font-size: 16px;
+}

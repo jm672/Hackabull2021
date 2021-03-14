@@ -1,0 +1,139 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(to top left, #65E5C2, #68A3F5, #FC66F0);
+    overflow: none;
+}
+
+.placeInfoWindowImg {
+    height: 204px;
+}
+
+.top-right-menu {
+    padding-top: 160px;
+    text-align: center;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    height: 300px;
+    width: 200px;
+    top: 40px;
+    right: 40px;
+    border-radius: 20px;
+    background: linear-gradient(to right bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .3));
+    backdrop-filter: blur(5px);
+}
+
+#logo {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    height: 120px;
+    width: 120px;
+}
+#toggle-sidebar {
+    top: 100px;
+    right: 40px;
+    font-size: 21px;
+    color: rgb(0, 209, 178);
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+}
+
+#preferences {
+    top: 160px;
+    right: 40px;
+    font-size: 21px;
+    color: rgb(50, 115, 220);
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+}
+
+#logout {
+    top: 220px;
+    right: 40px;
+    font-size: 21px;
+    color: rgb(241, 70, 104);
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#panel {
+    height: 100%;
+    width: null;
+    background-color: white;
+    position: fixed;
+    z-index: 1;
+    overflow-x: hidden;
+    transition: all .2s ease-out;
+}
+
+.open {
+    width: 250px;
+}
+
+/* Styling for place details */
+.hero {
+    width: 100%;
+    height: auto;
+    max-height: 166px;
+    display: block;
+}
+
+.place, p {
+    font-family: 'open sans', arial, sans-serif;
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.details {
+    color: darkslategrey;
+}
+
+a {
+    text-decoration: none;
+    color: cadetblue;
+}
+
+.nav-bar {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 32px;
+    height: 100vh;
+    width: 70%;
+    left: 0;
+    background: rgb(255, 255, 255);
+    background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.5));
+    backdrop-filter: blur(4px);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in;
+    overflow-y: auto;
+}
+
+.nav-bar section {
+    flex: 1;
+    padding: 15px;
+}
+
+
+
+.nav-active {
+    transform: translateX(0%);
+}
+
+.card {
+    margin-bottom: 25px;
+}
