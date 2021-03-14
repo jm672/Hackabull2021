@@ -6,20 +6,9 @@ let infoWindow;
 let currentInfoWindow;
 let service;
 let infoPane;
-var col = 0;
-
-
-//User preferences
-//let userPreferences = ["aquarium", "amusement park", "clothes"];
 let userPlaces = [];
-
-let foodPrefs = ["sushi"];
-let foodResults;
-let funPrefs = ["aquarium"];
-let funResults;
-
-
-
+//User preferences
+let userPreferences = ["sushi", "arcade", "movies"]; 
 
 //Map Initialization
 function initMap() {
@@ -47,13 +36,12 @@ function initMap() {
             bounds.extend(pos);
 
             infoWindow.setPosition(pos);
-            infoWindow.setContent('Let\'s Go Loco');
+            infoWindow.setContent('Location found.');
             infoWindow.open(map);
             map.setCenter(pos);
 
             // Call Places Nearby Search on user's location
-            getPrefPlaces(pos, foodPrefs, col);
-            getPrefPlaces(pos, funPrefs, col);
+            getPrefPlaces(pos, userPreferences);
         }, () => {
             // Browser supports geolocation, but user has denied permission
             handleLocationError(true, infoWindow);
@@ -62,13 +50,11 @@ function initMap() {
     // Browser doesn't support geolocation
     handleLocationError(false, infoWindow);
     }
-
 }
 
-
-function getPrefPlaces (pos, userPreferences, col) {
+function getPrefPlaces (pos, userPreferences) {
     userPreferences.forEach(prefVal => {
-        getNearbyPlaces(pos, prefVal, col);
+        getNearbyPlaces(pos, prefVal);
     });
     //initHeatmap();
 }
@@ -96,7 +82,7 @@ function handleLocationError(browserHasGeolocation, infoWindow) {
 }
 
 // Perform a Places Nearby Search Request
-function getNearbyPlaces(position, prefVal, col) {
+function getNearbyPlaces(position, prefVal) {
     let request = {
     location: position,
     rankBy: google.maps.places.RankBy.DISTANCE,
@@ -105,56 +91,26 @@ function getNearbyPlaces(position, prefVal, col) {
     };
 
     service = new google.maps.places.PlacesService(map);
-
-    //
     service.nearbySearch(request, nearbyCallback);
-    //service.nearbySearch(request, nearbyCallback);
 }
 
 // Handle the results (up to 20) of the Nearby Search
 function nearbyCallback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         createMarkers(results);
-        console.log("Callback made" + col);
-        col+=1;
     }
 }
 
 // Set markers at the location of each place result
 function createMarkers(places) {
     places.forEach(place => {
-        let marker = new google.maps.Marker({ 
+        let marker = new google.maps.Marker({
             position: place.geometry.location,
             map: map,
             title: place.name
             });
         userPlaces.push(marker);
-        let request = {
-            placeId: place.place_id,
-            fields: ['name', 'formatted_address', 'geometry', 'rating',
-            'website', 'photos']
-        };
         
-        
-        //setTimeout(() => {
-        service.getDetails(request, (placeResult, status) => {
-            console.log("Pregen column number:" + col);
-            if (col == 0) {
-                console.log("Case A:" + col);
-                generateCard(placeResult, "foodCards");
-            }
-            else if (col == 1) {
-                //console.log("Case B:" + col);
-                generateCard(placeResult, "funCards");                    
-            }
-            else {
-                //console.log("Case C:" + col);
-                generateCard(placeResult, "randomCards");
-            }
-        
-        });
-        //}, 500);
-
         // Add click listener to each marker
         google.maps.event.addListener(marker, 'click', () => {
             let request = {
@@ -174,7 +130,6 @@ function createMarkers(places) {
 // Adjust the map bounds to include the location of this marker
         bounds.extend(place.geometry.location);
     });
-    
 
     /* Once all the markers have been placed, adjust the bounds of the map to
     * show all the markers within the visible area. */
@@ -184,133 +139,20 @@ function createMarkers(places) {
 // Builds an InfoWindow to display details above the marker
 function showDetails(placeResult, marker, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
+        console.log(userPlaces);
         let placeInfowindow = new google.maps.InfoWindow();
-        let photoURL = "https://img.icons8.com/cotton/2x/party-baloons.png";
-        if (placeResult.photos != null) {
-            photoURL = placeResult.photos[0].getUrl();
-        }
-        //TODO: Adjust image width and height, handle errors if there is no image available
-        placeInfowindow.setContent('<img class="placeInfoWindowImg" src=\"' + photoURL + '\"></img><div><strong>' + placeResult.name +
+        placeInfowindow.setContent('<div><strong>' + placeResult.name +
         '</strong><br>' + 'Rating: ' + placeResult.rating + '</div>');
         placeInfowindow.open(marker.map, marker);
         currentInfoWindow.close();
         currentInfoWindow = placeInfowindow;
-        //showPanel(placeResult);
+        showPanel(placeResult);
     } else {
         console.log('showDetails failed: ' + status);
     }
 }
 
-//entertainCards
-function generateCard(placeResult, column) {
-    if(placeResult == null) {
-        return;
-    }
-    let photoURL = "https://img.icons8.com/cotton/2x/party-baloons.png";
-    let name = placeResult.name;
-    let rating = "No Rating";
-    let website = "No Website";
-    let address = "No Address";
-    if (placeResult.photos != null) {
-        photoURL = placeResult.photos[0].getUrl();
-    }
-    if (placeResult.rating != null) {
-        rating = placeResult.rating;
-    }
-    if (placeResult.website) {
-        website = placeResult.website;
-    }
-    if(placeResult.formatted_address != null){
-        address = placeResult.formatted_address;
-    }
-    document.getElementById(column).innerHTML +=
-    `<div class="card">
-    <div class="card-image">
-    <figure class="image is-4by3">
-        <img src=${photoURL} alt="Placeholder image">
-    </figure>
-    </div>
-    <div class="card-content">
-    <div class="media">
-        <div class="media-content">
-        <p class="title is-4">${name}</p>
-        </div>
-    </div>
-
-    <div class="content">
-    <p>Rating: ${rating}</p>
-    <p>${address}</p>
-         <a href="${website}">${website}</a>
-        <br>
-    </div>
-    </div>
-    </div>`;
-
-}  
-
-
-    //Randomize Button
-function randomSelection(arr){
-    const randomElement = Math.floor(Math.random() * arr.length); //Select random location.
-    return arr[randomElement];
-}
-/*
-
-
-Variables
-Picture
-Title
-Description
-URL
-
-let photoURL = "https://img.icons8.com/cotton/2x/party-baloons.png";
-let name = placeResult.name;
-let rating = "No Rating";
-let website = "No Website";
-if (placeResult.photos != null) {
-    photoURL = placeResult.photos[0].getUrl();
-}
-if (placeResult.rating != null) {
-    rating = placeResult.rating;
-}
-if (placeResult.website) {
-    website = placeResult.website;
-}
-
-
-
-            <div class="card">
-                <div class="card-image">
-                  <figure class="image is-4by3">
-                    <img src="../../../assets/rest1.jpg" alt="Placeholder image">
-                  </figure>
-                </div>
-                <div class="card-content">
-                  <div class="media">
-                    <div class="media-content">
-                      <p class="title is-4">Test Restaurant</p>
-                    </div>
-                  </div>
-              
-                  <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                    <a href="#">#css</a> <a href="#">#responsive</a>
-                    <br>
-                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                  </div>
-                </div>
-              </div>
-              */
-
-
-
-
-
-
-
-
-/* Displays place details in a sidebar
+// Displays place details in a sidebar
 function showPanel(placeResult) {
     // If infoPane is already open, close it
         if (infoPane.classList.contains("open")) {
@@ -362,7 +204,7 @@ function showPanel(placeResult) {
     infoPane.classList.add("open");
 }
 
-// HeatMap Options
+/* HeatMap Options
 function toggleHeatmap() {
     heatmap.setMap(heatmap.getMap() ? null : map);
   }

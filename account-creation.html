@@ -11,44 +11,47 @@
     <title>Go Loco</title>
 </head>
 <body>
-
-    
     
     <div class="centered-content">
 
-        <img src="./images/party-baloons.png" alt="" id="logo">
-        <h1 id="logo-text">Let's Go Loco</h1>
-
-        <form action="login.php" method="post"> 
+        <div class="create-account-container">
+            <!-- <form action="api.letsgolo.co/register.php" method="post"> -->
             <div class="field">
-                <p class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="Username" name="username">
+                <label class="label">Name</label>
+                <div class="control">
+                <input class="input" type="text" placeholder="Name" name="name">
+                </div>
+            </div>
+            
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control has-icons-left has-icons-right">
+                <input class="input" type="text" placeholder="Username" id="username-form" name="username">
                 <span class="icon is-small is-left">
                     <i class="fas fa-user"></i>
                 </span>
-                </p>
-                <!-- <p class="help is-danger">Username is incorrect</p> -->
+                </div>
             </div>
+
             <div class="field">
+                <label class="label">Password</label>
                 <p class="control has-icons-left">
                 <input class="input" type="password" placeholder="Password" name="password">
                 <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                 </span>
                 </p>
-                <!-- <p class="help is-danger">Password is incorrect</p> -->
             </div>
-
+            
             <div class="field is-grouped">
                 <div class="control">
-                    <a href="./dashboard.html" id="green-text">Login</a>
+                <a href="./preferences.html" id="green-text">Continue</a>
                 </div>
                 <div class="control">
-                    <a href="./account-creation.html" id="blue-text">Create Account</a>
+                <a href="./index.html" id="red-text">Cancel</a>
                 </div>
             </div>
-        </form>
-
+        <!-- </form> -->
     </div>
     
 </body>
