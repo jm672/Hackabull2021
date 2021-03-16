@@ -2,11 +2,9 @@
 require 'header.php'; // This imports the header so we do not have to rewrite it for every page.
 ?>
 
-<title>Register</title>
-
 <?php
 if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged in. If they are redirect to dashboard instead.
-	header("Location: dashboard.php");
+	header("Location: index.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checks to see if the current page is a GET or POST request
@@ -15,9 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checks to see if the current page
 
 	try {
 		$hashedpassword = password_hash($_POST["password"], PASSWORD_DEFAULT); // Hashes the password for security purposes.
+        $lowerUsername = strtolower($_POST["username"]);
 
-		$stmt = $pdo->prepare("INSERT INTO users (username, password, name, reset) VALUES (?, ?, ?, ?)");
-		$stmt->execute([$_POST["username"], $hashedpassword, $_POST["name"], true,]);
+		$stmt = $pdo->prepare("INSERT INTO users (username, password, name) VALUES (?, ?, ?)");
+		$stmt->execute([$lowerUsername, $hashedpassword, $_POST["name"],]);
 
 		header("location:login.php"); // Redirects to the login page once account has been created without any errors
 	} catch (PDOException $e) { // Catches errors thrown by SQL and prints it to the webpage so debugging is easier. Shouldn't be executed on production.

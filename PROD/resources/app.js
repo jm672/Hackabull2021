@@ -6,19 +6,23 @@ let infoWindow;
 let currentInfoWindow;
 let service;
 let infoPane;
-let currentCol = 0;
+let col = 0;
 
 //User preferences
 //let userPreferences = ["aquarium", "amusement park", "clothes"];
 let userPlaces = [];
 
-console.log(jArray);
-let foodPrefs = ["sushi"];
-let funPrefs = jArray;
+let funPrefs = [];
+entertainmentArray.forEach(e => {
+    funPrefs.push(e.preference);
+    });
+    
+let foodPrefs = [];
+foodArray.forEach(e => {
+    foodPrefs.push(e.preference);
+    });
 
-
-
-
+let allPrefs = [...foodPrefs.concat(funPrefs)]; 
 
 //Map Initialization
 function initMap() {
@@ -51,9 +55,21 @@ function initMap() {
             map.setCenter(pos);
 
             // Call Places Nearby Search on user's location
-            getPrefPlaces(pos, foodPrefs);
-            column = 1;
-            getPrefPlaces(pos, funPrefs);
+            console.log("initialize column" + col);
+            getPrefPlaces(pos, foodPrefs, col);
+            setTimeout(() => {
+                col+=1;
+                console.log("initialize column" + col);
+                getPrefPlaces(pos, funPrefs, col);
+                    setTimeout(() => {
+                    col+=1;
+                    console.log("initialize column" + col);
+                    let randomNum = randomEle(allPrefs);
+                    getPrefPlaces(pos, allPrefs.splice(randomNum, randomNum+1), col);
+                    }, 3000);
+            }, 3000);
+            
+
         }, () => {
             // Browser supports geolocation, but user has denied permission
             handleLocationError(true, infoWindow);
@@ -66,9 +82,9 @@ function initMap() {
 }
 
 
-function getPrefPlaces (pos, userPreferences) {
+function getPrefPlaces (pos, userPreferences, col) {
     userPreferences.forEach(prefVal => {
-        getNearbyPlaces(pos, prefVal);
+        getNearbyPlaces(pos, prefVal, col);
     });
     //initHeatmap();
 }
@@ -96,7 +112,7 @@ function handleLocationError(browserHasGeolocation, infoWindow) {
 }
 
 // Perform a Places Nearby Search Request
-function getNearbyPlaces(position, prefVal) {
+function getNearbyPlaces(position, prefVal, col) {
     let request = {
     location: position,
     rankBy: google.maps.places.RankBy.DISTANCE,
@@ -105,20 +121,27 @@ function getNearbyPlaces(position, prefVal) {
     };
 
     service = new google.maps.places.PlacesService(map);
+
+    //
+    
     service.nearbySearch(request, nearbyCallback);
+    
+    //service.nearbySearch(request, nearbyCallback);
 }
 
 // Handle the results (up to 20) of the Nearby Search
 function nearbyCallback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         createMarkers(results);
+        console.log("Content Loading. . . : " + col);
     }
 }
 
 // Set markers at the location of each place result
 function createMarkers(places) {
+    console.log("Loading markers. . .")
     places.forEach(place => {
-        let marker = new google.maps.Marker({
+        let marker = new google.maps.Marker({ 
             position: place.geometry.location,
             map: map,
             title: place.name
@@ -130,20 +153,25 @@ function createMarkers(places) {
             'website', 'photos']
         };
         
-        setTimeout(() => {
+        
+        
         service.getDetails(request, (placeResult, status) => {
-            if (currentCol == 0) {
+            //console.log("Pregen column number:" + col);
+            if (col == 0) {
+                //console.log("Case A:" + col);
                 generateCard(placeResult, "foodCards");
             }
-            else if (currentCol == 1) {
+            else if (col == 1) {
+                //console.log("Case B:" + col);
                 generateCard(placeResult, "funCards");                    
             }
             else {
+                //console.log("Case C:" + col);
                 generateCard(placeResult, "randomCards");
             }
         
-        })
-        }, 500);
+        });
+        
 
         // Add click listener to each marker
         google.maps.event.addListener(marker, 'click', () => {
@@ -164,6 +192,7 @@ function createMarkers(places) {
 // Adjust the map bounds to include the location of this marker
         bounds.extend(place.geometry.location);
     });
+    
 
     /* Once all the markers have been placed, adjust the bounds of the map to
     * show all the markers within the visible area. */
@@ -198,7 +227,7 @@ function generateCard(placeResult, column) {
     let photoURL = "https://img.icons8.com/cotton/2x/party-baloons.png";
     let name = placeResult.name;
     let rating = "No Rating";
-    let website = "No Website";
+    let website = "<p>No Website</p>";
     let address = "No Address";
     if (placeResult.photos != null) {
         photoURL = placeResult.photos[0].getUrl();
@@ -207,7 +236,7 @@ function generateCard(placeResult, column) {
         rating = placeResult.rating;
     }
     if (placeResult.website) {
-        website = placeResult.website;
+        website = `<a href="${placeResult.website}"><i class="fas fa-globe"> Website</i></a>`;
     }
     if(placeResult.formatted_address != null){
         address = placeResult.formatted_address;
@@ -229,7 +258,7 @@ function generateCard(placeResult, column) {
     <div class="content">
     <p>Rating: ${rating}</p>
     <p>${address}</p>
-         <a href="${website}">${website}</a>
+         ${website}
         <br>
     </div>
     </div>
@@ -238,157 +267,8 @@ function generateCard(placeResult, column) {
 }  
 
 
-    //Randomize Button
-function randomSelection(arr){
+//Randomize Button
+function randomEle(arr){
     const randomElement = Math.floor(Math.random() * arr.length); //Select random location.
-    return arr[randomElement];
+    return randomElement;
 }
-/*
-
-
-Variables
-Picture
-Title
-Description
-URL
-
-let photoURL = "https://img.icons8.com/cotton/2x/party-baloons.png";
-let name = placeResult.name;
-let rating = "No Rating";
-let website = "No Website";
-if (placeResult.photos != null) {
-    photoURL = placeResult.photos[0].getUrl();
-}
-if (placeResult.rating != null) {
-    rating = placeResult.rating;
-}
-if (placeResult.website) {
-    website = placeResult.website;
-}
-
-
-
-            <div class="card">
-                <div class="card-image">
-                  <figure class="image is-4by3">
-                    <img src="../../../assets/rest1.jpg" alt="Placeholder image">
-                  </figure>
-                </div>
-                <div class="card-content">
-                  <div class="media">
-                    <div class="media-content">
-                      <p class="title is-4">Test Restaurant</p>
-                    </div>
-                  </div>
-              
-                  <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                    <a href="#">#css</a> <a href="#">#responsive</a>
-                    <br>
-                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                  </div>
-                </div>
-              </div>
-              */
-
-
-
-
-
-
-
-
-/* Displays place details in a sidebar
-function showPanel(placeResult) {
-    // If infoPane is already open, close it
-        if (infoPane.classList.contains("open")) {
-        infoPane.classList.remove("open");
-    }
-
-    // Clear the previous details
-    while (infoPane.lastChild) {
-        infoPane.removeChild(infoPane.lastChild);
-    }
-
-    // Add the primary photo, if there is one
-    if (placeResult.photos != null) {
-        let firstPhoto = placeResult.photos[0];
-        let photo = document.createElement('img');
-        photo.classList.add('hero');
-        photo.src = firstPhoto.getUrl();
-        infoPane.appendChild(photo);
-    }
-
-
-    // Add place details with text formatting
-    let name = document.createElement('h1');
-    name.classList.add('place');
-    name.textContent = placeResult.name;
-    infoPane.appendChild(name);
-    if (placeResult.rating != null) {
-        let rating = document.createElement('p');
-        rating.classList.add('details');
-        rating.textContent = `Rating: ${placeResult.rating} \u272e`;
-        infoPane.appendChild(rating);
-    }
-    let address = document.createElement('p');
-    address.classList.add('details');
-    address.textContent = placeResult.formatted_address;
-    infoPane.appendChild(address);
-    if (placeResult.website) {
-        let websitePara = document.createElement('p');
-        let websiteLink = document.createElement('a');
-        let websiteUrl = document.createTextNode(placeResult.website);
-        websiteLink.appendChild(websiteUrl);
-        websiteLink.title = placeResult.website;
-        websiteLink.href = placeResult.website;
-        websitePara.appendChild(websiteLink);
-        infoPane.appendChild(websitePara);
-    }
-
-    // Open the infoPane
-    infoPane.classList.add("open");
-}
-
-// HeatMap Options
-function toggleHeatmap() {
-    heatmap.setMap(heatmap.getMap() ? null : map);
-  }
-
-function changeGradient() {
-    const gradient = [
-        "rgba(0, 255, 255, 0)",
-        "rgba(0, 255, 255, 1)",
-        "rgba(0, 191, 255, 1)",
-        "rgba(0, 127, 255, 1)",
-        "rgba(0, 63, 255, 1)",
-        "rgba(0, 0, 255, 1)",
-        "rgba(0, 0, 223, 1)",
-        "rgba(0, 0, 191, 1)",
-        "rgba(0, 0, 159, 1)",
-        "rgba(0, 0, 127, 1)",
-        "rgba(63, 0, 91, 1)",
-        "rgba(127, 0, 63, 1)",
-        "rgba(191, 0, 31, 1)",
-        "rgba(255, 0, 0, 1)",
-    ];
-    heatmap.set("gradient", heatmap.get("gradient") ? null : gradient);
-}
-
-function changeRadius() {
-    heatmap.set("radius", heatmap.get("radius") ? null : 20);
-}
-  
-function changeOpacity() {
-    heatmap.set("opacity", heatmap.get("opacity") ? null : 0.2);
-}
-
-function initHeatmap() {
-    //Heatmap Init
-            heatmap = new google.maps.visualization.HeatmapLayer({
-                data: placesLatLng,
-                map: map,
-              });
-}
-*/

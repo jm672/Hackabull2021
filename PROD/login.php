@@ -2,11 +2,9 @@
 require 'header.php'; // This imports the header so we do not have to rewrite it for every page.
 ?>
 
-<title>Login</title>
-
 <?php
 if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged in. If they are redirect to dashboard instead.
-	header("Location: dashboard.php");
+	header("Location: index.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -14,8 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	require 'dbconn.php'; // Imports the database connection where we establish the PDO
 
 	try {
+		$lowerUsername = strtolower($_POST["username"]);
+
 		$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-		$stmt->execute([$_POST["username"]]);
+		$stmt->execute([$lowerUsername]);
 		$user = $stmt->fetch(PDO::FETCH_ASSOC);
 		$count = $stmt->rowCount();
 
@@ -51,6 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	
 	?>
 	<div class="centered-content">
+		
+		<img src="resources/images/party-baloons.png" alt="" id="logo">
+        <h1 id="logo-text">Let's Go Loco</h1>
 
         <form action="" method="post"> 
             <div class="field">
