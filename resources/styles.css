@@ -34,14 +34,12 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
-#logo-login {
-    height: 120px;
-    width: 120px;
-    margin-left: 100px;
-    margin-bottom: 10px;
+.logo-login {
+    display: block;
+    margin: auto;
 }
 
-#logo-text{
+.logo-text {
     font-weight: 900;
     font-family: 'Nunito', sans-serif;
     font-size: 50px;

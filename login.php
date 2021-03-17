@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$_SESSION["user_id"] = $user["uid"]; // Sets the user's id so its easy to keep track of
 				$_SESSION["firstname"] = $user["firstname"]; // Sets the user's firstname so we can welcome them on the dashboard.
 				if ($user["reset"] == true) {
-				    $_SESSION["reset"] == true;
+					$_SESSION["reset"] == true;
 					header("location:preferences.php"); 		// Should direct user to preference page if first time or dashboard if not
 				}
 				header("location:index.php");
@@ -37,55 +37,64 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	} catch (PDOException $e) { // Catches errors thrown by SQL and prints it to the webpage so debugging is easier. Shouldn't be executed on production.
 		echo "Connection failed: " . $e->getMessage();
 	}
-	
-	if (isset($message)) { // Catches messages we want to send to the user.
-	echo '<div class="msgbox">';
-	echo '<label style="color:red;">' . $message . '</label>';
-	echo '</div>';
-	}
 
 	$pdo = null; // Clears the PDO connection
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-	
-	?>
-	<div class="centered-content">
-		
-		<img src="resources/images/party-baloons.png" alt="" id="logo">
-        <h1 id="logo-text">Let's Go Loco</h1>
-
-        <form action="" method="post"> 
-            <div class="field">
-                <p class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="Username" name="username">
-                <span class="icon is-small is-left">
-                    <i class="fas fa-user"></i>
-                </span>
-                </p>
-            </div>
-            <div class="field">
-                <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Password" name="password">
-                <span class="icon is-small is-left">
-                    <i class="fas fa-lock"></i>
-                </span>
-                </p>
-            </div>
-
-            <div class="field is-grouped">
-                <div class="control">
-                    <button type="submit" id="green-text">Login</a>
-                </div>
-                <div class="control">
-                    <a href="register.php" id="blue-text">Create Account</a>
-                </div>
-            </div>
-        </form>
-
-<?php
-
-}
-
-include 'footer.php'; // This imports the footer so we do not have to rewrite it for every page.
 ?>
+<div class="centered-content">
+
+	<img src="resources/images/party-baloons.png" alt="" class="logo-login">
+	<h1 class="logo-text">Let's Go Loco</h1>
+	<p id="danger"></p>
+
+	<form action="" method="post">
+		<div class="field">
+			<p class="control has-icons-left has-icons-right">
+				<input class="input" type="text" placeholder="Username" name="username" required>
+				<span class="icon is-small is-left">
+					<i class="fas fa-user"></i>
+				</span>
+			</p>
+		</div>
+		<div class="field">
+			<p class="control has-icons-left">
+				<input class="input" type="password" placeholder="Password" name="password" required>
+				<span class="icon is-small is-left">
+					<i class="fas fa-lock"></i>
+				</span>
+			</p>
+		</div>
+
+		<div class="field is-grouped">
+			<div class="control">
+				<button type="submit" id="green-text">Login</a>
+			</div>
+			<div class="control">
+				<a href="register.php" id="blue-text">Create Account</a>
+			</div>
+		</div>
+	</form>
+
+	<?php
+
+	if (isset($message)) { // Catches messages we want to send to the user.
+	?>
+		<script>
+			document.getElementById("danger").innerHTML +=
+				"<h6>Invalid credentials. Please try again.";
+
+			var element = document.getElementsByClassName('input');
+
+			// Iterate through the retrieved elements and add the necessary class names.
+			for (var i = 0; i < element.length; i++) {
+				element[i].classList.add('is-danger');
+				console.log(element[i].className);
+			}
+		</script>
+	<?php
+	}
+
+
+	include 'footer.php'; // This imports the footer so we do not have to rewrite it for every page.
+	?>

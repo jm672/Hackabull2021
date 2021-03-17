@@ -79,6 +79,13 @@ if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged inp
     </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkned5ZWpqlTpQUxkT8CFlQpLTah5Ardk&callback=initMap&libraries=visualization,places&v=weekly" async></script>
+    <script src="resources/app.js"></script>
+    <script> // Sets the navbar slide function
+		function navSlide() {
+			const nav = document.querySelector('.nav-bar');
+			nav.classList.toggle('nav-active');
+		}
+	</script>
 
 <?php
     }

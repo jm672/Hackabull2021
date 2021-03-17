@@ -36,14 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             <div class="field">
                 <label class="label">Name</label>
                 <div class="control">
-                <input class="input" type="text" placeholder="Name" name="name">
+                <input class="input" type="text" placeholder="Name" name="name" required>
                 </div>
             </div>
             
             <div class="field">
                 <label class="label">Username</label>
                 <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="Username" id="username-form" name="username">
+                <input class="input" type="text" placeholder="Username" id="username-form" name="username" required>
                 <span class="icon is-small is-left">
                     <i class="fas fa-user"></i>
                 </span>
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             <div class="field">
                 <label class="label">Password</label>
                 <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Password" name="password">
+                <input class="input" type="password" placeholder="Password" name="password" required>
                 <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                 </span>
