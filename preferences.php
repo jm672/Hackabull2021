@@ -27,7 +27,7 @@ if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged in.
                     $stmt->execute([$_SESSION["user_id"], $param_name,]);
                 }
             }
-            header("location:index.php");
+            header("location: index.php");
         } catch (PDOException $e) { // Catches errors thrown by SQL and prints it to the webpage so debugging is easier. Shouldn't be executed on production.
             echo "Connection failed: " . $e->getMessage();
         }
@@ -91,6 +91,7 @@ if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged in.
                         </div>
 
                         <div class="field is-grouped" id="group-button">
+                            <h1></h1>
                             <div class="control">
                                 <button type=submit id="green-text">Continue</a>
                             </div>

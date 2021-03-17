@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$_SESSION["reset"] == true;
 					header("location:preferences.php"); 		// Should direct user to preference page if first time or dashboard if not
 				}
-				header("location:index.php");
+				header("location: index.php");
 			} else {
 				$message = 'Credentials are invalid.<br>Please try again.';
 			}
