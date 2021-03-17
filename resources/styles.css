@@ -5,7 +5,6 @@ body {
     height: 100vh;
     width: 100vw;
     background: linear-gradient(to top left, #65E5C2, #68A3F5, #FC66F0);
-    
 }
 
 .centered-content {
@@ -44,6 +43,10 @@ body {
     font-family: 'Nunito', sans-serif;
     font-size: 50px;
     margin-bottom: 20px;
+}
+
+#danger {
+    text-align: center;
 }
 
 button {
@@ -88,8 +91,6 @@ button {
     list-style: none;
 }
 
-
-
 .checkbox-span {
     border-radius: 5px;
     padding: 4px 6px;
@@ -97,6 +98,7 @@ button {
     outline-style: none;
     transition: all .6s;
 }
+
 .checkbox-span:hover {
     background: rgb(159, 196, 255);
 }
@@ -105,10 +107,9 @@ button {
     display: none;
 }
 
-:checked ~ span{
+:checked~span {
     background: rgb(190, 252, 242);
 }
-
 
 .preferences-container {
     display: flex;
@@ -126,8 +127,6 @@ button {
     padding: 42px;
     min-width: 300px;
 }
-
-
 
 .choices input {
     margin-bottom: 10px;
@@ -204,7 +203,9 @@ button {
     width: 250px;
 }
 
+
 /* Styling for place details */
+
 .hero {
     width: 100%;
     height: auto;
@@ -212,7 +213,8 @@ button {
     display: block;
 }
 
-.place, p {
+.place,
+p {
     font-family: 'open sans', arial, sans-serif;
     padding-left: 18px;
     padding-right: 18px;

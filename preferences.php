@@ -16,7 +16,7 @@ if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged in.
             $stmt->execute([$_SESSION["user_id"],]);
             $stmt = $pdo->prepare("DELETE FROM entertainment WHERE uid = ?");
             $stmt->execute([$_SESSION["user_id"],]);
-            
+
             foreach ($_POST as $param_name => $param_val) {
                 $param_name = str_replace("", " ", $param_name);
                 if ($param_name == 'bakery' || $param_name == 'bar' || $param_name == 'cafe' || $param_name == 'convenience_store' || $param_name == 'liquor_store' || $param_name == 'meal_delivery' || $param_name == 'meal_takeaway' || $param_name == 'restaurant' || $param_name == 'supermarket') {
@@ -26,7 +26,8 @@ if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged in.
                     $stmt = $pdo->prepare("INSERT INTO entertainment (uid, preference) VALUES (?, ?)");
                     $stmt->execute([$_SESSION["user_id"], $param_name,]);
                 }
-            } header("location:index.php");
+            }
+            header("location:index.php");
         } catch (PDOException $e) { // Catches errors thrown by SQL and prints it to the webpage so debugging is easier. Shouldn't be executed on production.
             echo "Connection failed: " . $e->getMessage();
         }
@@ -65,7 +66,7 @@ if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged in.
                             <label class="checkbox"><input type="checkbox" placeholder="Stadium" name="stadium"><span class="checkbox-span"> Stadiums</span></label>
                             <label class="checkbox"><input type="checkbox" placeholder="Tourist Attraction" name="tourist attraction"><span class="checkbox-span"> Tourist Attractions</span></label>
                             <label class="checkbox"><input type="checkbox" placeholder="Zoo" name="zoo"><span class="checkbox-span"> Zoos</span></label>
-                            
+
                         </div>
 
                     </section>
@@ -77,17 +78,17 @@ if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged in.
                         </h1>
 
                         <div class="choices">
-                        <label class="checkbox"><input type="checkbox" placeholder="Bakery" name="bakery"><span class="checkbox-span"> Bakeries</span></label>
-                        <label class="checkbox"><input type="checkbox" placeholder="Bar" name="bar"><span class="checkbox-span"> Bars</span></label>
-                        <label class="checkbox"><input type="checkbox" placeholder="Cafe" name="cafe"><span class="checkbox-span"> Cafes</span></label>
-                        <label class="checkbox"><input type="checkbox" placeholder="Convenience Store" name="convenience store"><span class="checkbox-span"> Convenience Stores</span></label>
-                        <label class="checkbox"><input type="checkbox" placeholder="Liquor Store" name="liquor store"><span class="checkbox-span"> Liquor Stores</span></label>
-                        <label class="checkbox"><input type="checkbox" placeholder="Meal Deliveryk" name="meal delivery">Meal Deliveries</span></label>
-                        <label class="checkbox"><input type="checkbox" placeholder="Meal Takeaway" name="meal takeaway">Meal Takeaways</span></label>
-                        <label class="checkbox"><input type="checkbox" placeholder="Restaurant" name="restaurant"><span class="checkbox-span"> Restaurants</span></label>
-                        <label class="checkbox"><input type="checkbox" placeholder="Supermarket" name="supermarket"><span class="checkbox-span"> Supermarkets</span></label>
-                        
-                      </div>
+                            <label class="checkbox"><input type="checkbox" placeholder="Bakery" name="bakery"><span class="checkbox-span"> Bakeries</span></label>
+                            <label class="checkbox"><input type="checkbox" placeholder="Bar" name="bar"><span class="checkbox-span"> Bars</span></label>
+                            <label class="checkbox"><input type="checkbox" placeholder="Cafe" name="cafe"><span class="checkbox-span"> Cafes</span></label>
+                            <label class="checkbox"><input type="checkbox" placeholder="Convenience Store" name="convenience store"><span class="checkbox-span"> Convenience Stores</span></label>
+                            <label class="checkbox"><input type="checkbox" placeholder="Liquor Store" name="liquor store"><span class="checkbox-span"> Liquor Stores</span></label>
+                            <label class="checkbox"><input type="checkbox" placeholder="Meal Deliveryk" name="meal delivery"><span class="checkbox-span">Meal Deliveries</span></label>
+                            <label class="checkbox"><input type="checkbox" placeholder="Meal Takeaway" name="meal takeaway"><span class="checkbox-span">Meal Takeaways</span></label>
+                            <label class="checkbox"><input type="checkbox" placeholder="Restaurant" name="restaurant"><span class="checkbox-span"> Restaurants</span></label>
+                            <label class="checkbox"><input type="checkbox" placeholder="Supermarket" name="supermarket"><span class="checkbox-span"> Supermarkets</span></label>
+
+                        </div>
 
                         <div class="field is-grouped" id="group-button">
                             <div class="control">

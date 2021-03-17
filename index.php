@@ -40,7 +40,7 @@ if (isset($_SESSION['user_id'])) { // Checks if the user is currently logged inp
         <div id="map"></div>
 
     <div class="top-right-menu">
-        <a href="index.php"><img src="resources/images/party-balloons.png" alt="" id="logo-dashboard"></a>
+        <a href="index.php"><img src="resources/images/party-baloons.png" alt="" id="logo-dashboard"></a>
         <a href="#" onclick="navSlide()" id="toggle-sidebar">Toggle Menu</a>
         <a href="preferences.php" id="preferences">Preferences</a>
         <a href="logout.php" id="logout">Logout</a>
