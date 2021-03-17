@@ -81,6 +81,37 @@ button {
     margin: 5px 5px 5px 5px;
 }
 
+.choices {
+    margin-left: 2em;
+    display: block;
+    position: relative;
+    margin-top: -1.4em;
+    line-height: 1.4em;
+    list-style: none;
+}
+
+
+
+.checkbox-span {
+    border-radius: 5px;
+    padding: 4px 6px;
+    line-height: 190%;
+    outline-style: none;
+    transition: all .6s;
+}
+.checkbox-span:hover {
+    background: rgb(159, 196, 255);
+}
+
+.choices input[type="checkbox"] {
+    display: none;
+}
+
+:checked ~ span{
+    background: rgb(190, 252, 242);
+}
+
+
 .preferences-container {
     display: flex;
     align-content: stretch;
@@ -98,13 +129,7 @@ button {
     min-width: 300px;
 }
 
-.choices {
-    margin-left: 2em;
-    display: block;
-    position: relative;
-    margin-top: -1.4em;
-    line-height: 1.4em;
-}
+
 
 .choices input {
     margin-bottom: 10px;
