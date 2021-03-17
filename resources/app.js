@@ -55,15 +55,12 @@ function initMap() {
             map.setCenter(pos);
 
             // Call Places Nearby Search on user's location
-            console.log("initialize column" + col);
             getPrefPlaces(pos, foodPrefs, col);
             setTimeout(() => {
                 col+=1;
-                console.log("initialize column" + col);
                 getPrefPlaces(pos, funPrefs, col);
                     setTimeout(() => {
                     col+=1;
-                    console.log("initialize column" + col);
                     let randomNum = randomEle(allPrefs);
                     getPrefPlaces(pos, allPrefs.splice(randomNum, randomNum+1), col);
                     }, 3000);
@@ -83,8 +80,8 @@ function initMap() {
 
 
 function getPrefPlaces (pos, userPreferences, col) {
-    userPreferences.forEach(prefVal => {
-        getNearbyPlaces(pos, prefVal, col);
+    userPreferences.forEach(prefVal => {setTimeout(() => {
+        getNearbyPlaces(pos, prefVal, col);}, 1000);
     });
     //initHeatmap();
 }
@@ -133,13 +130,11 @@ function getNearbyPlaces(position, prefVal, col) {
 function nearbyCallback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         createMarkers(results);
-        console.log("Content Loading. . . : " + col);
     }
 }
 
 // Set markers at the location of each place result
 function createMarkers(places) {
-    console.log("Loading markers. . .")
     places.forEach(place => {
         let marker = new google.maps.Marker({ 
             position: place.geometry.location,
@@ -152,26 +147,9 @@ function createMarkers(places) {
             fields: ['name', 'formatted_address', 'geometry', 'rating',
             'website', 'photos']
         };
-        
-        
-        
-        service.getDetails(request, (placeResult, status) => {
-            //console.log("Pregen column number:" + col);
-            if (col == 0) {
-                //console.log("Case A:" + col);
-                generateCard(placeResult, "foodCards");
-            }
-            else if (col == 1) {
-                //console.log("Case B:" + col);
-                generateCard(placeResult, "funCards");                    
-            }
-            else {
-                //console.log("Case C:" + col);
-                generateCard(placeResult, "randomCards");
-            }
-        
-        });
-        
+    
+
+        menuInit(request);
 
         // Add click listener to each marker
         google.maps.event.addListener(marker, 'click', () => {
@@ -215,13 +193,30 @@ function showDetails(placeResult, marker, status) {
         currentInfoWindow = placeInfowindow;
         //showPanel(placeResult);
     } else {
-        console.log('showDetails failed: ' + status);
     }
+}
+
+
+
+function menuInit(request){
+    service.getDetails(request, (placeResult, status) => {
+        if (col == 0) {
+            generateCard(placeResult, "foodCards");
+        }
+        else if (col == 1) {
+            generateCard(placeResult, "funCards");                    
+        }
+        else {
+            generateCard(placeResult, "randomCards");
+        }
+    
+    });
 }
 
 //entertainCards
 function generateCard(placeResult, column) {
     if(placeResult == null) {
+        console.log("Null response from API");
         return;
     }
     let photoURL = "https://img.icons8.com/cotton/2x/party-baloons.png";
@@ -236,7 +231,7 @@ function generateCard(placeResult, column) {
         rating = placeResult.rating;
     }
     if (placeResult.website) {
-        website = `<a href="${placeResult.website}"><i class="fas fa-globe"> Website</i></a>`;
+        website = `<a href="${placeResult.website}"><i class="fas fa-globe"> <span style="font-family: 'Nunito', sans-serif">Website</span></i></a>`;
     }
     if(placeResult.formatted_address != null){
         address = placeResult.formatted_address;
