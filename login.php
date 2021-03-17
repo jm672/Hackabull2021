@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <div class="centered-content">
 
-	<img src="resources/images/party-baloons.png" alt="" class="logo-login">
+	<img src="resources/images/party-balloons.png" alt="" class="logo-login">
 	<h1 class="logo-text">Let's Go Loco</h1>
 	<h6 id="danger"></h6>
 
